@@ -7,7 +7,7 @@ if [ -z "$1" ]; then
 fi
 
 REPOSITORY_NAME="$1"
-LOCATION=${2:-"East US"}
+LOCATION=${2:-"Central US"}
 ORGANIZATION_NAME="littlehorse-cloud"
 
 
