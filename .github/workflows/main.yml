@@ -1,0 +1,37 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+   runs-on: ubuntu-latest
+   steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Generate a changelog
+      uses: orhun/git-cliff-action@v3
+      id: cliff
+      with:
+        config: cliff.toml
+        args: --bump --unreleased --verbose
+
+    - name: Create a release
+      if: steps.cliff.outputs.version != ''
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        gh release create \
+          "${{steps.cliff.outputs.version }}" \
+          --title "${{ steps.cliff.outputs.version }}" \
+          --notes "${{ steps.cliff.outputs.content }}" \
+          --target main \
+          --latest
