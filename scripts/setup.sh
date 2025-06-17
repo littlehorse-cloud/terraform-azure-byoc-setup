@@ -45,18 +45,21 @@ output "byoc_setup_details" {
  description = "Details of the BYOC setup."
 }
 
-provider "google" {
- project = var.project_id
+provider "azurerm" {
+  features {}
+  subscription_id = var.subscription_id
 }
+
+provider "azuread" {}
 
 EOF
 
-if ! command -v az &> /dev/null; then
-    echo "Error: Azure CLI (az) is not installed. Please install it and try again."
+export TF_VAR_subscription_id=$(az account show --query id -o tsv 2>/dev/null)
+
+if [[ -z "$TF_VAR_subscription_id" ]]; then
+    echo "Error get azure account. Make sure you are logged in to Azure (run 'az login') and that az CLI is installed."
     exit 1
 fi
-
-export TF_VAR_subscription_id=$(az account show --query id -o tsv 2>/dev/null)
 
 terraform init
 terraform apply -auto-approve
