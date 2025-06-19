@@ -30,7 +30,7 @@ module "setup_byoc" {
   version = "$MODULE_VERSION"
 
   subscription_id   = var.subscription_id
-  repository_name   = "gcp-byoc-$REPOSITORY_NAME"
+  repository_name   = "azure-byoc-$REPOSITORY_NAME"
   organization_name = "$ORGANIZATION_NAME"
   location          = "$LOCATION"
 }
