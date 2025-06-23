@@ -8,7 +8,7 @@ resource "azurerm_storage_account" "terraform_state" {
   depends_on                      = [azurerm_resource_group.lh_group]
 }
 
-resource "azurerm_storage_container" "terraform_state" {
+resource "azurerm_storage_container" "terraform_state_container" {
   name                  = "lh-byoc-terraform-state"
   storage_account_name  = azurerm_storage_account.terraform_state.name
   container_access_type = "private"
