@@ -25,7 +25,7 @@ jobs:
         args: --bump --unreleased --verbose
 
     - name: Create a release
-      if: steps.cliff.outputs.version != ''
+      if: steps.cliff.outputs.version != 'null'
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
