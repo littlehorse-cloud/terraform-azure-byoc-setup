@@ -18,14 +18,14 @@ jobs:
         fetch-depth: 0
 
     - name: Generate a changelog
-      uses: orhun/git-cliff-action@v3
+      uses: orhun/git-cliff-action@v4
       id: cliff
       with:
         config: cliff.toml
         args: --bump --unreleased --verbose
 
     - name: Create a release
-      if: steps.cliff.outputs.version != ''
+      if: steps.cliff.outputs.version != 'null'
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
