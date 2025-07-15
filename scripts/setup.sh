@@ -54,12 +54,34 @@ provider "azuread" {}
 
 EOF
 
-export TF_VAR_subscription_id=$(az account show --query id -o tsv 2>/dev/null)
+echo "Fetching list of Azure subscriptions..."
 
-if [[ -z "$TF_VAR_subscription_id" ]]; then
-    echo "Error get azure account. Make sure you are logged in to Azure (run 'az login') and that az CLI is installed."
+mapfile -t subscriptions < <(az account list --query "[].name" -o tsv)
+
+if [ ${#subscriptions[@]} -eq 0 ]; then
+    echo "No subscriptions found."
     exit 1
 fi
+
+echo "Please select the subscription you want to use:"
+select sub_name in "${subscriptions[@]}"; do
+    if [ -n "$sub_name" ]; then
+        read -p "You have selected '$sub_name'. Are you sure? (y/n) " -n 1 -r
+        echo 
+
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            az account set --subscription "$sub_name"
+            echo "Subscription set to: $sub_name"
+            break
+        else
+            echo "Selection cancelled. Please choose a subscription again."
+        fi
+    else
+        echo "Invalid selection. Please try again."
+    fi
+done
+
+export TF_VAR_subscription_id=$(az account show --query id -o tsv 2>/dev/null)
 
 terraform init
 terraform apply -auto-approve
