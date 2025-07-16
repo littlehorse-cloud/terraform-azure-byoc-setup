@@ -6,13 +6,11 @@ The script only needs the repository name as a parameter, the resource location 
 
 Run the script
 
-```sh
-
-curl -sSL https://raw.githubusercontent.com/littlehorse-cloud/terraform-azure-byoc-setup/main/scripts/setup.sh | bash -s <REPOSITORY_NAME>
-
-```
-
 **Note: the repository name assumes the prefix `azure-byoc-<REPOSITORY_NAME>`**
+
+```sh
+curl -sS -O https://raw.githubusercontent.com/littlehorse-cloud/terraform-azure-byoc-setup/main/scripts/setup.sh  && sh setup.sh <REPOSITORY_NAME>
+```
 
 Once the process ends, please share the output with the sales representative.
 
