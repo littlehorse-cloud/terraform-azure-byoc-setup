@@ -10,10 +10,52 @@ REPOSITORY_NAME="$1"
 LOCATION=${2:-"Central US"}
 ORGANIZATION_NAME="littlehorse-cloud"
 
-
 MODULE_VERSION="$(git ls-remote --tags --sort="v:refname" https://github.com/littlehorse-cloud/terraform-azure-byoc-setup.git | grep -v '\^{}' | tail -n1 | sed 's/.*\///; s/^v//')"
 
 WORKDIR="tf-byoc-module"
+
+if ! command -v az &> /dev/null; then
+    echo "Azure CLI is not installed. Install it from: https://aka.ms/installazurecli"
+    exit 1
+fi
+
+az account show &> /dev/null
+if [ $? -ne 0 ]; then
+    echo "No active Azure session found. Please Logging in."
+    exit 1
+fi
+
+subscriptions=$(az account list --query '[].{name:name, id:id}' -o tsv)
+
+if [ -z "$subscriptions" ]; then
+    echo "No subscriptions found."
+    exit 1
+fi
+
+echo "Available Azure Subscriptions for LH installation:"
+IFS=$'\n'
+select sub in $subscriptions; do
+    if [[ -n "$sub" ]]; then
+        name=$(echo "$sub" | cut -f1)
+        id=$(echo "$sub" | cut -f2)
+
+        echo ""
+        echo "You selected: $name"
+        read -p "Are you sure you want to use this subscription? (y/n): " confirm
+
+        if [[ "$confirm" == "y" || "$confirm" == "Y" ]]; then
+            echo "Switching to subscription: $name"
+            az account set --subscription "$id"
+            echo "Active subscription: $(az account show --query name -o tsv)"
+        else
+            echo "Operation cancelled."
+            exit 1
+        fi
+        break
+    else
+        echo "Invalid option. Please try again."
+    fi
+done
 
 # if workdir exists then exit with error
 if [ -d "$WORKDIR" ]; then
@@ -53,33 +95,6 @@ provider "azurerm" {
 provider "azuread" {}
 
 EOF
-
-echo "Fetching list of Azure subscriptions..."
-
-mapfile -t subscriptions < <(az account list --query "[].name" -o tsv)
-
-if [ ${#subscriptions[@]} -eq 0 ]; then
-    echo "No subscriptions found."
-    exit 1
-fi
-
-echo "Please select the subscription you want to use:"
-select sub_name in "${subscriptions[@]}"; do
-    if [ -n "$sub_name" ]; then
-        read -p "You have selected '$sub_name'. Are you sure? (y/n) " -n 1 -r
-        echo 
-
-        if [[ $REPLY =~ ^[Yy]$ ]]; then
-            az account set --subscription "$sub_name"
-            echo "Subscription set to: $sub_name"
-            break
-        else
-            echo "Selection cancelled. Please choose a subscription again."
-        fi
-    else
-        echo "Invalid selection. Please try again."
-    fi
-done
 
 export TF_VAR_subscription_id=$(az account show --query id -o tsv 2>/dev/null)
 
