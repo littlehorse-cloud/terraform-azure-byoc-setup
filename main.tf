@@ -1,8 +1,5 @@
-resource "random_id" "identity_pool_id" {
-  byte_length = 4
-}
 resource "azuread_application_registration" "github_actions" {
-  display_name = "littlehorse-app-${random_id.identity_pool_id.hex}"
+  display_name = "littlehorse-app-${substr(var.subscription_id, 0, 6)}"
 }
 
 resource "azuread_application_federated_identity_credential" "main_branch" {
