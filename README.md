@@ -32,6 +32,15 @@ Make sure to install pre-commit
 pre-commit install
 ```
 
+## How to run tests
+
+Go to the root of the project and run:
+
+```sh
+terraform test
+```
+
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
@@ -65,7 +74,6 @@ No modules.
 | [azurerm_storage_account.terraform_state](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account) | resource |
 | [azurerm_storage_container.terraform_state_container](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_container) | resource |
 | [azuread_client_config.current](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/data-sources/client_config) | data source |
-| [azurerm_subscription.primary](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/subscription) | data source |
 
 ## Inputs
 

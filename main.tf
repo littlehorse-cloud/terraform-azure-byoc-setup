@@ -9,6 +9,7 @@ resource "azuread_application_federated_identity_credential" "main_branch" {
   audiences      = ["api://AzureADTokenExchange"]
   issuer         = "https://token.actions.githubusercontent.com"
   subject        = "repo:${var.organization_name}/${var.repository_name}:ref:refs/heads/main"
+  depends_on     = [azuread_application_registration.github_actions]
 }
 
 resource "azuread_service_principal" "github_sa" {
@@ -16,13 +17,13 @@ resource "azuread_service_principal" "github_sa" {
 }
 
 resource "azurerm_role_assignment" "github_sa_roll_contributor" {
-  scope                = data.azurerm_subscription.primary.id
+  scope                = "/subscriptions/${var.subscription_id}"
   role_definition_name = "Contributor"
   principal_id         = azuread_service_principal.github_sa.object_id
 }
 
 resource "azurerm_role_assignment" "github_sa_roll_user_access_admin" {
-  scope                = data.azurerm_subscription.primary.id
+  scope                = "/subscriptions/${var.subscription_id}"
   role_definition_name = "User Access Administrator"
   principal_id         = azuread_service_principal.github_sa.object_id
 }
