@@ -7,6 +7,10 @@ variables {
 mock_provider "azurerm" {
 }
 
+mock_provider "azuread" {
+
+}
+
 run "empty_input_validation" {
   command = plan
 
