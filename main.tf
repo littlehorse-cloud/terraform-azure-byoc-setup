@@ -16,14 +16,9 @@ resource "azuread_service_principal" "github_sa" {
   client_id = azuread_application_registration.github_actions.client_id
 }
 
-resource "azurerm_role_assignment" "github_sa_roll_contributor" {
+resource "azurerm_role_assignment" "github_sa_custom_role_assignment" {
   scope                = "/subscriptions/${var.subscription_id}"
-  role_definition_name = "Contributor"
+  role_definition_name = azurerm_role_definition.custom_role.name
   principal_id         = azuread_service_principal.github_sa.object_id
-}
-
-resource "azurerm_role_assignment" "github_sa_roll_user_access_admin" {
-  scope                = "/subscriptions/${var.subscription_id}"
-  role_definition_name = "User Access Administrator"
-  principal_id         = azuread_service_principal.github_sa.object_id
+  depends_on           = [azurerm_role_definition.custom_role]
 }
