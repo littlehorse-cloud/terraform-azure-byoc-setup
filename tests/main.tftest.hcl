@@ -89,40 +89,6 @@ run "check_application_registration_name" {
   }
 }
 
-run "check_role_assignments" {
-  command = plan
-
-  assert {
-    condition     = azurerm_role_assignment.github_sa_roll_contributor.role_definition_name == "Contributor"
-    error_message = "Incorrect role definition name for Contributor role assignment"
-  }
-
-  assert {
-    condition     = azurerm_role_assignment.github_sa_roll_user_access_admin.role_definition_name == "User Access Administrator"
-    error_message = "Incorrect role definition name for User Access Administrator role assignment"
-  }
-
-  assert {
-    condition     = azurerm_role_assignment.github_sa_roll_contributor.scope == "/subscriptions/${var.subscription_id}"
-    error_message = "Scope for Contributor role assignment is not set to subscription level"
-  }
-
-  assert {
-    condition     = azurerm_role_assignment.github_sa_roll_user_access_admin.scope == "/subscriptions/${var.subscription_id}"
-    error_message = "Scope for User Access Administrator role assignment is not set to subscription level"
-  }
-
-  assert {
-    condition     = azurerm_role_assignment.github_sa_roll_contributor.scope == "/subscriptions/${var.subscription_id}"
-    error_message = "Incorrect scope for Contributor role assignment"
-  }
-
-  assert {
-    condition     = azurerm_role_assignment.github_sa_roll_user_access_admin.scope == "/subscriptions/${var.subscription_id}"
-    error_message = "Incorrect scope for User Access Administrator role assignment"
-  }
-}
-
 run "check_federated_identity_credential" {
   command = plan
 
@@ -139,5 +105,42 @@ run "check_federated_identity_credential" {
   assert {
     condition     = azuread_application_federated_identity_credential.main_branch.issuer == "https://token.actions.githubusercontent.com"
     error_message = "Incorrect issuer for federated identity credential"
+  }
+}
+
+run "check_custom_role_definition" {
+  command = plan
+
+  assert {
+    condition     = azurerm_role_definition.custom_role.name == "LittleHorse BYOC"
+    error_message = "Custom role name does not match expected value"
+  }
+
+  assert {
+    condition     = azurerm_role_definition.custom_role.scope == "/subscriptions/${var.subscription_id}"
+    error_message = "Custom role scope does not match subscription ID"
+  }
+
+  assert {
+    condition     = length(azurerm_role_definition.custom_role.permissions[0].actions) > 0
+    error_message = "Custom role permissions actions should not be empty"
+  }
+  assert {
+    condition     = azurerm_role_definition.custom_role.assignable_scopes[0] == "/subscriptions/${var.subscription_id}"
+    error_message = "Custom role assignable scopes do not match expected value"
+  }
+}
+
+run "check_custom_role_assignments" {
+  command = plan
+
+  assert {
+    condition     = azurerm_role_assignment.github_sa_custom_role_assignment.role_definition_name == azurerm_role_definition.custom_role.name
+    error_message = "Role assignment does not match custom role definition"
+  }
+
+  assert {
+    condition = azurerm_role_assignment.github_sa_custom_role_assignment.scope == "/subscriptions/${var.subscription_id}"
+    error_message = "Role assignment scope does not match subscription ID"
   }
 }
