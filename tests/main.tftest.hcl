@@ -70,6 +70,7 @@ run "check_terraform_state_container" {
     condition     = azurerm_storage_container.terraform_state_container.name == "lh-byoc-terraform-state"
     error_message = "Incorrect storage container name"
   }
+
   assert {
     condition     = azurerm_storage_container.terraform_state_container.container_access_type == "private"
     error_message = "Storage container access type must be private"
@@ -125,9 +126,15 @@ run "check_custom_role_definition" {
     condition     = length(azurerm_role_definition.custom_role.permissions[0].actions) > 0
     error_message = "Custom role permissions actions should not be empty"
   }
+
   assert {
     condition     = azurerm_role_definition.custom_role.assignable_scopes[0] == "/subscriptions/${var.subscription_id}"
     error_message = "Custom role assignable scopes do not match expected value"
+  }
+
+  assert {
+    condition     = length(azurerm_role_definition.custom_role.permissions[0].data_actions) > 0
+    error_message = "Custom role data actions should not be empty"
   }
 }
 
