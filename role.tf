@@ -26,7 +26,13 @@ resource "azurerm_role_definition" "custom_role" {
       "Microsoft.KeyVault/vaults/keys/*",
       "Microsoft.ContainerRegistry/registries/*",
       "Microsoft.ContainerRegistry/registries/listCredentials/action",
-      "Microsoft.ContainerRegistry/registries/generateCredentials/action"
+      "Microsoft.ContainerRegistry/registries/generateCredentials/action",
+      "Microsoft.Storage/storageAccounts/listKeys/action",
+      "Microsoft.Storage/storageAccounts/read",
+      "Microsoft.Authorization/roleAssignments/read"
+    ]
+    data_actions = [
+      "Microsoft.Storage/storageAccounts/blobServices/containers/blobs/*"
     ]
   }
 }
