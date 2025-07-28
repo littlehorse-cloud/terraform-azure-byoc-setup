@@ -19,6 +19,7 @@ resource "azurerm_role_definition" "custom_role" {
       "Microsoft.Resources/subscriptions/resourceGroups/read",
       "Microsoft.Resources/subscriptions/resourceGroups/write",
       "Microsoft.Authorization/roleAssignments/*",
+      "Microsoft.Authorization/roleDefinitions/read",
       "Microsoft.Authorization/roleDefinitions/write",
       "Microsoft.Authorization/roleDefinitions/delete",
       "Microsoft.KeyVault/vaults/*",
@@ -30,7 +31,10 @@ resource "azurerm_role_definition" "custom_role" {
       "Microsoft.Storage/storageAccounts/listKeys/action",
       "Microsoft.Storage/storageAccounts/read",
       "Microsoft.Authorization/roleAssignments/read",
-      "Microsoft.KeyVault/locations/deletedVaults/purge/action"
+      "Microsoft.Authorization/roleAssignments/write",
+      "Microsoft.Authorization/roleAssignments/delete",
+      "Microsoft.KeyVault/locations/deletedVaults/purge/action",
+      "Microsoft.KeyVault/locations/operationResults/read"
     ]
     data_actions = [
       "Microsoft.Storage/storageAccounts/blobServices/containers/blobs/*"
