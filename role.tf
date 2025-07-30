@@ -1,5 +1,5 @@
 resource "azurerm_role_definition" "custom_role" {
-  name              = "LittleHorse BYOC"
+  name              = "LittleHorse BYOC ${local.suffix}"
   scope             = "/subscriptions/${var.subscription_id}"
   assignable_scopes = ["/subscriptions/${var.subscription_id}"]
   description       = "Role for deploying LittleHorse BYOC Infrastructure"

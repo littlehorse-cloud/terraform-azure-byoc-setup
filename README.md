@@ -83,6 +83,7 @@ No modules.
 | <a name="input_organization_name"></a> [organization\_name](#input\_organization\_name) | The name of the GitHub organization to be used for Azure AD App registration. | `string` | n/a | yes |
 | <a name="input_repository_name"></a> [repository\_name](#input\_repository\_name) | The name of the GitHub repository to be used for Azure AD App registration. | `string` | n/a | yes |
 | <a name="input_subscription_id"></a> [subscription\_id](#input\_subscription\_id) | The Azure subscription ID. | `string` | n/a | yes |
+| <a name="input_suffix_length"></a> [suffix\_length](#input\_suffix\_length) | The length of the suffix to be used in resource names. | `number` | `8` | no |
 
 ## Outputs
 
