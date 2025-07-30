@@ -3,6 +3,7 @@ variables {
   organization_name = "example-org"
   subscription_id   = "8f930fc9-57bd-411b-afc7-cfe952a8e2e1"
   location          = "East US"
+  suffix_length     = 8
 }
 mock_provider "azurerm" {
 }
@@ -52,7 +53,7 @@ run "check_resource_group" {
 run "check_azurerm_storage_account" {
   command = plan
   assert {
-    condition     = azurerm_storage_account.terraform_state.name == "lhterraformstate8f930f"
+    condition     = azurerm_storage_account.terraform_state.name == "lhterraformstate8f930fc9"
     error_message = "Incorrect bucket name"
   }
 
@@ -85,7 +86,7 @@ run "check_terraform_state_container" {
 run "check_application_registration_name" {
   command = plan
   assert {
-    condition     = azuread_application_registration.github_actions.display_name == "littlehorse-app-8f930f"
+    condition     = azuread_application_registration.github_actions.display_name == "littlehorse-app-8f930fc9"
     error_message = "Incorrect application registration display name"
   }
 }
@@ -113,7 +114,7 @@ run "check_custom_role_definition" {
   command = plan
 
   assert {
-    condition     = azurerm_role_definition.custom_role.name == "LittleHorse BYOC"
+    condition     = azurerm_role_definition.custom_role.name == "LittleHorse BYOC 8f930fc9"
     error_message = "Custom role name does not match expected value"
   }
 

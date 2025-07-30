@@ -1,5 +1,5 @@
 resource "azurerm_storage_account" "terraform_state" {
-  name                            = "lhterraformstate${substr(var.subscription_id, 0, 6)}"
+  name                            = "lhterraformstate${local.suffix}"
   resource_group_name             = local.resource_group_name
   location                        = local.location
   account_tier                    = "Standard"

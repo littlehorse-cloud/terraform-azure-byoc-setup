@@ -30,3 +30,9 @@ variable "subscription_id" {
     error_message = "The subscription_id variable must not be null or empty."
   }
 }
+
+variable "suffix_length" {
+  description = "The length of the suffix to be used in resource names."
+  type        = number
+  default     = 8
+}

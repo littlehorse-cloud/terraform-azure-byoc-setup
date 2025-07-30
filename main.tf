@@ -1,5 +1,5 @@
 resource "azuread_application_registration" "github_actions" {
-  display_name = "littlehorse-app-${substr(var.subscription_id, 0, 6)}"
+  display_name = "littlehorse-app-${local.suffix}"
 }
 
 resource "azuread_application_federated_identity_credential" "main_branch" {
