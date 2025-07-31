@@ -9,7 +9,7 @@ Run the script
 **Note: the repository name assumes the prefix `azure-byoc-<REPOSITORY_NAME>`**
 
 ```sh
-curl -sS -O https://raw.githubusercontent.com/littlehorse-cloud/terraform-azure-byoc-setup/main/scripts/setup.sh  && sh setup.sh <REPOSITORY_NAME>
+curl -sS -O https://raw.githubusercontent.com/littlehorse-cloud/terraform-azure-byoc-setup/main/scripts/setup.sh  && sh setup.sh <REPOSITORY_NAME> <LOCATION>
 ```
 
 Once the process ends, please share the output with the sales representative.
